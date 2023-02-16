@@ -20,7 +20,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .collect::<Result<Vec<std::fs::DirEntry>, _>>()
             .unwrap();
 
-        println!("Total elements: {}", dir_vec.len());
+        let total_elements: usize;
+        if args.all {
+            total_elements = dir_vec.len();
+        } else {
+            total_elements = dir_vec
+                .iter()
+                .filter(|i| i.file_name().to_str().unwrap().chars().nth(0).unwrap() != '.')
+                .collect::<Vec<&std::fs::DirEntry>>()
+                .len();
+        }
+
+        println!("Total elements: {}", total_elements);
 
         for item in dir_vec.iter() {
             if args.all {
